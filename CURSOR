@@ -1,0 +1,31 @@
+DELIMITER //
+
+CREATE PROCEDURE leerProductos()
+BEGIN
+ 
+    DECLARE validador INT DEFAULT FALSE;
+    DECLARE nombreProducto VARCHAR(255);
+    DECLARE precioProducto DECIMAL(10, 2);
+
+
+    DECLARE lectura CURSOR FOR SELECT nombre, precio FROM productos;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET validador = TRUE;
+
+
+    OPEN lectura;
+
+    entrarLoop: LOOP
+        FETCH lectura INTO nombreProducto, precioProducto;
+        IF validador = TRUE THEN
+            LEAVE entrarLoop;
+        END IF;
+        SELECT CONCAT('Producto: ', nombreProducto, ', Precio: ',precioProducto);
+    END LOOP;
+
+
+    CLOSE lectura;
+END //
+
+DELIMITER ;
+
+CALL leerProductos();
